@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Generador de Lección Aprendida QHSE</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -204,6 +205,27 @@
     background: #fff; color: var(--navy); cursor: pointer;
   }
   .historial-vacio { color: #999; font-size: 13px; text-align: center; padding: 20px 0; }
+
+  /* ===== Responsive: celular ===== */
+  @media (max-width: 768px) {
+    html, body { height: auto; }
+    body { overflow-y: auto; overflow-x: hidden; }
+    #toolbar { height: auto; flex-wrap: wrap; padding: 10px 16px; }
+    #toolbar h1 { font-size: 14px; }
+    #toolbar img { height: 24px; }
+    #body-row { flex-direction: column; height: auto; }
+    #panel-preview {
+      order: -1; width: 100%; flex: none; min-width: 0;
+      padding: 14px 10px; overflow: visible;
+    }
+    #panel-form {
+      width: 100%; flex: none; border-right: none;
+      border-top: 1px solid var(--gray-border); overflow-y: visible; padding: 18px 16px;
+    }
+    .modal-box { width: 92vw; max-width: 560px; }
+    .historial-item { flex-wrap: wrap; }
+    .historial-item .acciones { width: 100%; justify-content: flex-end; margin-top: 6px; }
+  }
 </style>
 </head>
 <body>
@@ -527,9 +549,15 @@
   const wrapper = document.getElementById('preview-wrapper');
   const card = document.getElementById('card');
   function ajustarEscala() {
+    const esMobile = window.innerWidth <= 768;
     const availW = panelPreview.clientWidth - 32;
-    const availH = panelPreview.clientHeight - 40;
-    const scale = Math.min(availW / 1000, availH / 750, 1);
+    let scale;
+    if (esMobile) {
+      scale = Math.min(availW / 1000, 1);
+    } else {
+      const availH = panelPreview.clientHeight - 40;
+      scale = Math.min(availW / 1000, availH / 750, 1);
+    }
     card.style.transform = `scale(${scale})`;
     wrapper.style.width = (1000 * scale) + 'px';
     wrapper.style.height = (750 * scale) + 'px';
